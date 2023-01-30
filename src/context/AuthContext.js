@@ -5,6 +5,7 @@ import Instance from "../Instance";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { useCookies } from 'react-cookie';
 
 const AuthContext = createContext({});
 
@@ -12,6 +13,7 @@ export const AuthWrapper = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const [ cookie, setCookie, removeCookie] = useCookies(['cookie-name']);
 
   const Register = async (email, password, username) => {
     setIsLoading(true);
@@ -43,6 +45,8 @@ export const AuthWrapper = ({ children }) => {
     else if (data.error === "Password incorrect")
       displayToastErrorByErrorCode(4);
     else if (data.message === "Auth successful") {
+      localStorage.setItem("token", data.token);
+      setCookie("token",  data.token);
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + data.token;
       setCurrentUser(data.user);
