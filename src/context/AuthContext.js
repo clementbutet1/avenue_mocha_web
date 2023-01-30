@@ -44,7 +44,7 @@ export const AuthWrapper = ({ children }) => {
       displayToastErrorByErrorCode(4);
     else if (data.message === "Auth successful") {
       axios.defaults.headers.common["Authorization"] =
-        "Bearer " + res.data.token;
+        "Bearer " + data.token;
       setCurrentUser(data.user);
       setIsLoading(false);
       Router.push("/");
