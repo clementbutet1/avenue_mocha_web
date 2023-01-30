@@ -5,6 +5,7 @@ import displayToastErrorByErrorCode from "../../utils/errors-management";
 import TextInput from "../../src/components/TextInput";
 import { useRouter } from 'next/router';
 import Instance from "../../src/Instance";
+import axios from "axios";
 
 const CoffeesPage = () => {
   const [author, setAuthor] = useState("");

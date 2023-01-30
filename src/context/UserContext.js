@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "./AuthContext";
 import Instance from "../Instance";
+import axios from "axios";
 
 const UserContext = createContext({});
 
