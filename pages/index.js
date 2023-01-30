@@ -5,6 +5,7 @@ import Router from "next/router";
 import displayToastErrorByErrorCode from "../utils/errors-management";
 import moment from "moment";
 import Instance from "../src/Instance";
+import axios from 'axios';
 
 const Home = () => {
   const [data, setData] = useState([]);
@@ -15,6 +16,7 @@ const Home = () => {
       {
         headers: {
           Accept: "application/json",
+          Authorization: axios.defaults.headers.common["Authorization"]
         },
       }
     );

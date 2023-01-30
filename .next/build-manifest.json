@@ -30,10 +30,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/authentication/register": [
+    "/create-coffee": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/authentication/register.js"
+      "static/chunks/pages/create-coffee.js"
     ],
     "/login": [
       "static/chunks/webpack.js",

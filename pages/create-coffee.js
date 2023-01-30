@@ -34,7 +34,7 @@ const CreateCoffee = () => {
     let res = await Instance.post(`/api/coffees/create`, raw, {
       headers: {
         Accept: "application/json",
-          Authorization: axios.defaults.headers.common["Authorization"],
+        Authorization: axios.defaults.headers.common["Authorization"],
       },
     });
     if (res.data) {
