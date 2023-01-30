@@ -12,16 +12,13 @@ export const UserWrapper = ({ children }) => {
   const [userData, setUserData] = useState(undefined);
 
   const getUserData = async () => {
-    let res = await Instance.get(
-      `/api/user/info/${userData?._id}`,
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
+    let res = await Instance.get(`/api/user/info/${userData?._id}`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
+        Authorization: axios.defaults.headers.common["Authorization"],
       }
-    );
+    });
     if (res.data) return res.data;
     else return 205;
   };
@@ -31,15 +28,12 @@ export const UserWrapper = ({ children }) => {
       email: email,
       username: username,
     };
-    let res = await Instance.put(
-      `/api/user/info/${userData?._id}`,
-      raw,
-      {
-        headers: {
-          Accept: "application/json",
-        },
-      }
-    );
+    let res = await Instance.put(`/api/user/info/${userData?._id}`, raw, {
+      headers: {
+        Accept: "application/json",
+        Authorization: axios.defaults.headers.common["Authorization"],
+      },
+    });
     if (res.data) return res.data;
     else return 205;
   };

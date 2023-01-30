@@ -39,6 +39,7 @@ const CoffeesPage = () => {
       {
         headers: {
           Accept: "application/json",
+          Authorization: axios.defaults.headers.common["Authorization"],
         },
       }
     );

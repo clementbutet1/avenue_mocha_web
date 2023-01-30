@@ -4,6 +4,7 @@ import Router from "next/router";
 import Instance from "../Instance";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 const AuthContext = createContext({});
 
@@ -42,6 +43,8 @@ export const AuthWrapper = ({ children }) => {
     else if (data.error === "Password incorrect")
       displayToastErrorByErrorCode(4);
     else if (data.message === "Auth successful") {
+      axios.defaults.headers.common["Authorization"] =
+        "Bearer " + res.data.token;
       setCurrentUser(data.user);
       setIsLoading(false);
       Router.push("/");
@@ -54,7 +57,12 @@ export const AuthWrapper = ({ children }) => {
       !router.asPath.startsWith("/authentication")
     ) {
       setIsLoading(true);
-      const { data } = await Instance.get("/api/user/autologin");
+      const { data } = await Instance.get("/api/user/autologin", {
+        headers: {
+          Accept: "application/json",
+          Authorization: axios.defaults.headers.common["Authorization"],
+        },
+      });
       if (data.message === "Auto Login success") {
         setCurrentUser(data.user);
         setIsLoading(false);
@@ -71,7 +79,12 @@ export const AuthWrapper = ({ children }) => {
     setIsLoading(true);
     setCurrentUser(undefined);
     Router.push("/login");
-    const { data } = await Instance.get("/api/user/logout");
+    const { data } = await Instance.get("/api/user/logout", {
+      headers: {
+        Accept: "application/json",
+        Authorization: axios.defaults.headers.common["Authorization"],
+      },
+    });
     console.log(data);
     if (data.message === "Disconnect success") {
       setIsLoading(false);
