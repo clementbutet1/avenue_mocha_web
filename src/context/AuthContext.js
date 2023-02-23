@@ -30,13 +30,15 @@ export const AuthWrapper = ({ children }) => {
 
   const Login = async (email, password) => {
     setIsLoading(true);
-    const { data } = await Instance.post(
+    let data = await Instance.post(
       "/api/user/login",
       {
         email,
         password,
       }
     );
+    console.log(data.data);
+    data = data.data;
     if (data.error === "User not found") displayToastErrorByErrorCode(3);
     else if (data.error === "Password incorrect")
       displayToastErrorByErrorCode(4);
@@ -47,39 +49,6 @@ export const AuthWrapper = ({ children }) => {
       Router.push("/");
     } else displayToastErrorByErrorCode(0);
   };
-
-  // const Login = async (email, password) => {
-  //   let myHeaders = new Headers();
-  //   myHeaders.append("Content-Type", "application/json");
-
-  //   let raw = JSON.stringify({
-  //     email: email,
-  //     password: password,
-  //   });
-
-  //   let requestOptions = {
-  //     method: "POST",
-  //     headers: myHeaders,
-  //     body: raw,
-  //     redirect: "follow",
-  //   };
-
-  //   fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/user/login`, requestOptions)
-  //     .then((response) => response.text())
-  //     .then((data) => {
-  //       console.log(data);
-  //       data = JSON.parse(data);
-  //       if (data.error === "User not found") displayToastErrorByErrorCode(3);
-  //       else if (data.error === "Password incorrect")
-  //         displayToastErrorByErrorCode(4);
-  //       else if (data.message === "Auth successful") {
-  //         setCurrentUser(data.user);
-  //         setIsLoading(false);
-  //         Router.push("/");
-  //       } else displayToastErrorByErrorCode(0);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
 
   const getUserData = async () => {
     if (currentUser) {
