@@ -68,7 +68,7 @@ const Home = () => {
                 </p>
                 <button
                   onClick={() => CommandCoffee(order.name)}
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+                  className="hover:text-black hover:bg-white bg-black dark:bg-white text-white dark:text-black dark:hover:bg-black dark:hover:text-white font-bold py-2 px-4 rounded mt-4"
                 >
                   Commander
                 </button>

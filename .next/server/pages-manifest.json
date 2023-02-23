@@ -2,9 +2,5 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/profil": "pages/profil.js",
-  "/coffee-commands": "pages/coffee-commands.js",
-  "/login": "pages/login.js",
-  "/create-coffee": "pages/create-coffee.js",
   "/": "pages/index.js"
 }
