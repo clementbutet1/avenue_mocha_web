@@ -1,13 +1,13 @@
 module.exports = {
   env: {
-    API_URL: "http://localhost:8000",
+    API_URL: process.env.NEXT_PUBLIC_APP_URL,
   },
 
   async rewrites() {
     return [
       {
         source: "/api/:path*",
-        destination: "http://localhost:8000/:path*", // Proxy to Backend
+        destination: process.env.NEXT_PUBLIC_APP_URL // Proxy to Backend
       },
     ];
   },
