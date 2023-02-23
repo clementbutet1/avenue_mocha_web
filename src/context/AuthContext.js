@@ -48,29 +48,34 @@ export const AuthWrapper = ({ children }) => {
   //   } else displayToastErrorByErrorCode(0);
   // };
 
-  const Login = async (email, password) =>
-    fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/user/login`, {
+  const Login = async (email, password) => {
+    var raw = JSON.stringify({
+      email: "clement.butet@orange.fr",
+      password: "Password1!",
+    });
+    await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/user/login`, {
       method: "POST",
       credentials: "include",
-      body: JSON.stringify({
-        Email: email,
-        Password: password,
-      }),
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-    }).then((data) => {
-      if (data.error === "User not found") displayToastErrorByErrorCode(3);
-      else if (data.error === "Password incorrect")
-        displayToastErrorByErrorCode(4);
-      else if (data.message === "Auth successful") {
-        console.log(data);
-        setCurrentUser(data.user);
-        setIsLoading(false);
-        Router.push("/");
-      } else displayToastErrorByErrorCode(0);
-    });
+      body: raw,
+    })
+      .then((response) => response.text())
+      .then((data) => {
+        data = JSON.parse(data);
+        if (data.error === "User not found") displayToastErrorByErrorCode(3);
+        else if (data.error === "Password incorrect")
+          displayToastErrorByErrorCode(4);
+        else if (data.message === "Auth successful") {
+          setCurrentUser(data.user);
+          setIsLoading(false);
+          Router.push("/");
+        } else displayToastErrorByErrorCode(0);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   const getUserData = async () => {
     if (currentUser) {
@@ -90,7 +95,6 @@ export const AuthWrapper = ({ children }) => {
       if (data.message === "Auto Login success") {
         setCurrentUser(data.user);
         setIsLoading(false);
-        console.log("autologin", data?.user);
         getUserData();
       } else if (data.message === "No token provided !") {
         setIsLoading(false);
