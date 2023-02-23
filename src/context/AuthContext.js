@@ -49,7 +49,7 @@ export const AuthWrapper = ({ children }) => {
   // };
 
   const Login = async (email, password) =>
-    fetch(`${process.env.NEXT_PUBLIC_APP_URL}`, {
+    fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/user/login`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify({
