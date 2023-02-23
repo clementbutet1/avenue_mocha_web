@@ -3,32 +3,21 @@ import displayToastErrorByErrorCode from "../utils/errors-management";
 import Router from "next/router";
 import Instance from "../Instance";
 import { toast } from "react-toastify";
-import { useRouter } from "next/router";
-import axios from "axios";
-import { useCookies } from "react-cookie";
-import { parseCookies } from "nookies";
-
 const AuthContext = createContext({});
 
 export const AuthWrapper = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(undefined);
   const [isLoading, setIsLoading] = useState(false);
-  const cookies = parseCookies();
 
   const Register = async (email, password, username, phone) => {
     setIsLoading(true);
-    let myHeaders = {
-      Accept: "application/json",
-      "Content-Type": "multipart/form-data",
-      "Access-Control-Allow-Origin": process.env.NEXT_PUBLIC_APP_URL,
-    };
     let raw = {
       email: email,
       password: password,
       username: username,
       phone: phone,
     };
-    let res = await Instance.post(`/api/user/create`, raw, myHeaders);
+    let res = await Instance.post(`/api/user/create`, raw);
     if (res.status === 201) {
       setIsLoading(false);
       Router.push("/login");
@@ -41,24 +30,18 @@ export const AuthWrapper = ({ children }) => {
 
   const Login = async (email, password) => {
     setIsLoading(true);
-    let myHeaders = {
-      Accept: "application/json",
-      "Content-Type": "multipart/form-data",
-      "Access-Control-Allow-Origin": process.env.NEXT_PUBLIC_APP_URL,
-    };
     const { data } = await Instance.post(
       "/api/user/login",
       {
         email,
         password,
-      },
-      myHeaders
+      }
     );
     if (data.error === "User not found") displayToastErrorByErrorCode(3);
     else if (data.error === "Password incorrect")
       displayToastErrorByErrorCode(4);
     else if (data.message === "Auth successful") {
-      localStorage.setItem("token", data.token);
+      console.log((data))
       setCurrentUser(data.user);
       setIsLoading(false);
       Router.push("/");
@@ -67,15 +50,9 @@ export const AuthWrapper = ({ children }) => {
 
   const getUserData = async () => {
     if (currentUser) {
-      let res = await Instance.get(`/api/user/info/${currentUser?._id}`, {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "multipart/form-data",
-          "Access-Control-Allow-Origin": process.env.NEXT_PUBLIC_APP_URL,
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      });
+      let res = await Instance.get(`/api/user/info/${currentUser?._id}`);
       if (res?.data) {
+        console.log(res?.data);
         setCurrentUser(res?.data[0]);
         return res.data[0];
       } else return 205;
@@ -85,17 +62,11 @@ export const AuthWrapper = ({ children }) => {
   const AutoLogin = async () => {
     try {
       setIsLoading(true);
-      const { data } = await Instance.get("/api/user/autologin", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "multipart/form-data",
-          "Access-Control-Allow-Origin": process.env.NEXT_PUBLIC_APP_URL,
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      });
+      const { data } = await Instance.get("/api/user/autologin");
       if (data.message === "Auto Login success") {
         setCurrentUser(data.user);
         setIsLoading(false);
+        console.log("autologin", data?.user);
         getUserData();
       } else if (data.message === "No token provided !") {
         setIsLoading(false);
@@ -112,11 +83,7 @@ export const AuthWrapper = ({ children }) => {
   const logout = async () => {
     setIsLoading(true);
     Router.push("/login");
-    const { data } = await Instance.get("/api/user/logout", {
-      headers: {
-        Accept: "application/json",
-      },
-    });
+    const { data } = await Instance.get("/api/user/logout");
     if (data.message === "Disconnect success") {
       setCurrentUser(undefined);
       setIsLoading(false);

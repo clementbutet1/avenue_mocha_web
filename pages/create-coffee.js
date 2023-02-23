@@ -37,12 +37,7 @@ const CreateCoffee = () => {
       caffeine: caffeine,
       quantity: quantity,
     };
-    let res = await Instance.post(`/api/coffees/create`, raw, {
-      headers: {
-        Accept: "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
+    let res = await Instance.post(`/api/coffees/create`, raw);
     if (res.data) {
       Router.push("/coffee-commands");
     } else displayToastErrorByErrorCode(0);

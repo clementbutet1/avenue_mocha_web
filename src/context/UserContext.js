@@ -7,7 +7,6 @@ const UserContext = createContext({});
 
 export const UserWrapper = ({ children }) => {
   const { currentUser, setCurrentUser } = useAuth();
-  const cookies = parseCookies();
 
   const updateUserData = async (email, username, phone, id) => {
     let raw = {
@@ -20,7 +19,6 @@ export const UserWrapper = ({ children }) => {
         Accept: "application/json",
         "Content-Type": "multipart/form-data",
         "Access-Control-Allow-Origin": process.env.NEXT_PUBLIC_APP_URL,
-        Authorization: `Bearer ${cookies.token}`,
       },
     });
     if (res.data) {
