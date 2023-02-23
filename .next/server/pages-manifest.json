@@ -1,7 +1,14 @@
 {
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
+  "/about": "pages/about.html",
+  "/authentication/register": "pages/authentication/register.html",
+  "/coffee-commands": "pages/coffee-commands.html",
+  "/coffees/[id]": "pages/coffees/[id].html",
+  "/create-coffee": "pages/create-coffee.html",
+  "/": "pages/index.html",
+  "/profil": "pages/profil.html",
+  "/login": "pages/login.html",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js",
-  "/login": "pages/login.js"
+  "/404": "pages/404.html"
 }
