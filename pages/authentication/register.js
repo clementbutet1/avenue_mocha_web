@@ -25,7 +25,7 @@ const CreateAccount = () => {
   const [fieldUsername, setFielUsername] = useState(false);
   const [fieldPassword, setFielPassword] = useState(false);
   const [fieldConfPassword, setFiedConfPassword] = useState(false);
-  const [filedPhone, setFieldPhone] = useState(false);
+  const [fieldPhone, setFieldPhone] = useState(false);
 
   const { Register } = useAuth();
 
@@ -180,7 +180,7 @@ const CreateAccount = () => {
                         </p>
                       </div>
                     )}
-                    {filedPhone && (
+                    {fieldPhone && (
                       <div className="flex item-start pl-5 text-red-600">
                         <p className="text-red pt-1 text-center">
                           Field Missing

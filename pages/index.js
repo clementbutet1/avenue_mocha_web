@@ -1,29 +1,46 @@
 import { useState, useEffect } from "react";
 import Layout from "../src/components/Layout";
+import { useAuth } from "../src/context/AuthContext";
+import Router from "next/router";
 
 const Home = () => {
+  const { isAuthenticated, isLoading } = useAuth();
   const coffeeOrders = [
     {
       name: "Coffee Long",
       description: "Long espresso coffee with hot water",
+      image: "/assets/coffee_long.jpeg",
     },
     {
       name: "Café latte",
       description: "Espresso coffee with hot milk and milk foam",
+      image: "/assets/latte.jpg",
     },
     {
       name: "Cappuccino",
       description: "Espresso coffee with hot milk and milk foam",
+      image: "/assets/cappucino.jpg",
     },
     {
       name: "Espresso",
       description: "A simple espresso",
+      image: "/assets/expresso.jpg",
     },
     {
       name: "Mocha",
       description: "Espresso coffee with hot chocolate and milk",
+      image: "/assets/mocha.jpg",
     },
   ];
+
+  const CommandCoffee = (title) => {
+    if (isAuthenticated)
+      Router.push({
+        pathname: "/create-coffee",
+        query: { titlecoffee: title },
+      });
+    else Router.push("/login");
+  };
 
   return (
     <Layout title="Home">
@@ -32,7 +49,7 @@ const Home = () => {
           <h1 className="text-6xl font-bold">Welcome to Avenue Mocha !</h1>
 
           <p className="mt-3 text-xl">
-          Here are some of our popular coffee orders :
+            Here are some of our popular coffee orders :
           </p>
 
           <div className="flex flex-wrap items-center justify-center  mt-6 sm:w-full">
@@ -41,9 +58,18 @@ const Home = () => {
                 key={order.name}
                 className="bg-white dark:bg-black dark:border-white dark:border-2 p-6 rounded-lg shadow-lg m-4 w-80"
               >
+                <img
+                  src={order.image}
+                  className="w-full max-h-32 object-fill"
+                />
                 <h3 className="font-bold text-xl mb-2">{order.name}</h3>
-                <p className="text-gray-700 dark:text-gray-300 text-base">{order.description}</p>
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+                <p className="text-gray-700 dark:text-gray-300 text-base">
+                  {order.description}
+                </p>
+                <button
+                  onClick={() => CommandCoffee(order.name)}
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+                >
                   Commander
                 </button>
               </div>

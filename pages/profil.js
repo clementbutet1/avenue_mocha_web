@@ -1,17 +1,21 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import Layout from "../src/components/Layout";
 import { useUser } from "../src/context/UserContext";
 import { toast } from "react-toastify";
 import Protected from "../src/hoc/Protected";
+import TextInput from "../src/components/TextInput";
 
 const ProfilPage = () => {
   const { userData, updateUserData } = useUser();
   const [username, setUsername] = useState(userData?.username);
+  const [phone, setPhone] = useState(userData?.phone);
   const [email, setEmail] = useState(userData?.email);
   const [emailError, setEmailError] = useState(false);
+  const [phoneError, setPhoneError] = useState(false);
 
   const [fieldEmail, setFielEmail] = useState(false);
   const [fieldUsername, setFielUsername] = useState(false);
+  const [fieldPhone, setFieldPhone] = useState(false);
 
   const validateEmail = (email) => {
     return String(email)
@@ -20,15 +24,27 @@ const ProfilPage = () => {
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
   };
+  useEffect(() => {
+    setFielEmail(false);
+    setFielUsername(false);
+    setFieldPhone(false);
+    setEmailError(false);
+  }, [email, phone, username]);
 
   const updateProfil = async () => {
     if (!email) setFielEmail(true);
     if (!username) setFielUsername(true);
-    if (!email || !username) return;
+    if (!phone) setFieldPhone(true);
+    if (!email || !username || !phone) return;
     if (validateEmail(email) === null) {
       setEmailError(true);
       return;
     }
+    if (phone.length != 10) {
+      setPhoneError(true);
+      return;
+    }
+    setFieldPhone(false);
     setFielEmail(false);
     setFielUsername(false);
     setEmailError(false);
@@ -83,54 +99,80 @@ const ProfilPage = () => {
                     <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                       Username
                     </label>
-                    <input
-                      type="phone"
-                      className={
-                        fieldUsername
-                          ? "border-red-500 border-1 px-3 py-3 placeholder-blueGray-300 dark:text-black text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                          : "border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 dark:text-black bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      }
-                      value={username}
-                      placeholder="Username"
-                      onChange={(e) => setUsername(e.target.value)}
-                    />
-                    {fieldUsername && (
-                      <div className="flex item-start pl-5 text-red-600">
-                        <p className="text-red pt-1 text-center">
-                          Field Missing
-                        </p>
-                      </div>
-                    )}
+                    <div className="flex flex-1 flex-col">
+                      <TextInput
+                        value={username}
+                        setValue={setUsername}
+                        setError={setFielUsername}
+                        error={fieldUsername}
+                        placeHolder={"Username"}
+                        type={"text"}
+                      />
+                      {fieldUsername && (
+                        <div className="flex item-start pl-5 text-red-600">
+                          <p className="text-red pt-1 text-center">
+                            Field Missing
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-                <div className="w-full lg:w-6/12 px-4 dark:bg-black">
+                  <div className="relative w-full mb-3">
+                    <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                      Phone
+                    </label>
+                    <div className="flex flex-1 flex-col">
+                      <TextInput
+                        value={phone}
+                        setValue={setPhone}
+                        setError={setPhoneError || setFieldPhone}
+                        error={setPhoneError || setFieldPhone}
+                        placeHolder={"Phone"}
+                        type={"phone"}
+                      />
+                      {phoneError && (
+                        <div className="flex item-start pl-5 text-red-600">
+                          <p className="text-red pt-1 text-center">
+                            The filed must containe 10 number
+                          </p>
+                        </div>
+                      )}
+                      {fieldPhone && (
+                        <div className="flex item-start pl-5 text-red-600">
+                          <p className="text-red pt-1 text-center">
+                            Field Missing
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
                   <div className="relative w-full mb-3">
                     <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                       Email address
                     </label>
-                    <input
-                      type="email"
-                      className={
-                        (emailError || fieldEmail)
-                          ? "border-red-500 border-1 px-3 py-3 placeholder-blueGray-300 dark:text-black text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                          : "border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 dark:text-black bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      }
-                      value={email}
-                      placeholder="Email"
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                    {emailError && (
-                      <div className="flex item-start pl-5 text-red-600">
-                        <p className="text-red text-center">Bad email</p>
-                      </div>
-                    )}
-                    {fieldEmail && (
-                      <div className="flex item-start pl-5 text-red-600">
-                        <p className="text-red pt-1 text-center">
-                          Field Missing
-                        </p>
-                      </div>
-                    )}
+                    <div className="flex flex-1 flex-col">
+                      <TextInput
+                        value={email}
+                        setValue={setEmail}
+                        setError={setEmailError || setFielEmail}
+                        error={emailError || fieldEmail}
+                        placeHolder={"Email"}
+                        type={"text"}
+                      />
+                      {emailError && (
+                        <div className="flex item-start pl-5 text-red-600">
+                          <p className="text-red text-center">Bad email</p>
+                        </div>
+                      )}
+                      {fieldEmail && (
+                        <div className="flex item-start pl-5 text-red-600">
+                          <p className="text-red pt-1 text-center">
+                            Field Missing
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

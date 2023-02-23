@@ -8,8 +8,9 @@ import axios from "axios";
 import Protected from "../src/hoc/Protected";
 
 const CreateCoffee = () => {
+  const { query: { titlecoffee } } = Router;
   const [author, setAuthor] = useState("");
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(titlecoffee);
   const [caffeine, setCaffeine] = useState(0);
   const [sugar, setSugar] = useState(0);
   const [quantity, setQuantity] = useState(1);
