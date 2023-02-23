@@ -6,18 +6,22 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import { parseCookies } from "nookies";
 
 const AuthContext = createContext({});
 
 export const AuthWrapper = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(undefined);
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+  const cookies = parseCookies();
 
   const Register = async (email, password, username, phone) => {
     setIsLoading(true);
-    let myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+    let myHeaders = {
+      Accept: "application/json",
+      "Content-Type": "multipart/form-data",
+      "Access-Control-Allow-Origin": process.env.NEXT_PUBLIC_APP_URL,
+    };
     let raw = {
       email: email,
       password: password,
@@ -37,10 +41,19 @@ export const AuthWrapper = ({ children }) => {
 
   const Login = async (email, password) => {
     setIsLoading(true);
-    const { data } = await Instance.post("/api/user/login", {
-      email,
-      password,
-    });
+    let myHeaders = {
+      Accept: "application/json",
+      "Content-Type": "multipart/form-data",
+      "Access-Control-Allow-Origin": process.env.NEXT_PUBLIC_APP_URL,
+    };
+    const { data } = await Instance.post(
+      "/api/user/login",
+      {
+        email,
+        password,
+      },
+      myHeaders
+    );
     if (data.error === "User not found") displayToastErrorByErrorCode(3);
     else if (data.error === "Password incorrect")
       displayToastErrorByErrorCode(4);
@@ -58,6 +71,8 @@ export const AuthWrapper = ({ children }) => {
         headers: {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
+          "Access-Control-Allow-Origin": process.env.NEXT_PUBLIC_APP_URL,
+          Authorization: `Bearer ${cookies.token}`,
         },
       });
       if (res?.data) {
@@ -73,6 +88,9 @@ export const AuthWrapper = ({ children }) => {
       const { data } = await Instance.get("/api/user/autologin", {
         headers: {
           Accept: "application/json",
+          "Content-Type": "multipart/form-data",
+          "Access-Control-Allow-Origin": process.env.NEXT_PUBLIC_APP_URL,
+          Authorization: `Bearer ${cookies.token}`,
         },
       });
       if (data.message === "Auto Login success") {

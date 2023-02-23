@@ -1,11 +1,13 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { useAuth } from "./AuthContext";
 import Instance from "../Instance";
+import { parseCookies } from "nookies";
 
 const UserContext = createContext({});
 
 export const UserWrapper = ({ children }) => {
   const { currentUser, setCurrentUser } = useAuth();
+  const cookies = parseCookies();
 
   const updateUserData = async (email, username, phone, id) => {
     let raw = {
@@ -16,6 +18,9 @@ export const UserWrapper = ({ children }) => {
     let res = await Instance.put(`/api/user/info/${currentUser?._id}`, raw, {
       headers: {
         Accept: "application/json",
+        "Content-Type": "multipart/form-data",
+        "Access-Control-Allow-Origin": process.env.NEXT_PUBLIC_APP_URL,
+        Authorization: `Bearer ${cookies.token}`,
       },
     });
     if (res.data) {

@@ -10,7 +10,9 @@ import { useAuth } from "../src/context/AuthContext";
 
 const CreateCoffee = () => {
   const { currentUser } = useAuth();
-  const { query: { titlecoffee } } = Router;
+  const {
+    query: { titlecoffee },
+  } = Router;
   const [author, setAuthor] = useState(currentUser?.username);
   const [title, setTitle] = useState(titlecoffee);
   const [caffeine, setCaffeine] = useState(0);
@@ -141,7 +143,6 @@ const CreateCoffee = () => {
             >
               Submit
             </button>
-            
           </div>
         </form>
       </div>
