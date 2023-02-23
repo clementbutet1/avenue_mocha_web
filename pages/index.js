@@ -39,7 +39,9 @@ const Home = () => {
         pathname: "/create-coffee",
         query: { titlecoffee: title },
       });
-    else Router.push("/login");
+    else {
+      Router.push("/login")
+    };
   };
 
   return (

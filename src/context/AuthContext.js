@@ -5,7 +5,7 @@ import Instance from "../Instance";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { useCookies } from 'react-cookie';
+import { useCookies } from "react-cookie";
 
 const AuthContext = createContext({});
 
@@ -13,7 +13,6 @@ export const AuthWrapper = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const [ cookie, setCookie, removeCookie] = useCookies(['cookie-name']);
 
   const Register = async (email, password, username, phone) => {
     setIsLoading(true);
@@ -47,51 +46,61 @@ export const AuthWrapper = ({ children }) => {
       displayToastErrorByErrorCode(4);
     else if (data.message === "Auth successful") {
       localStorage.setItem("token", data.token);
-      setCookie("token",  data.token);
-      axios.defaults.headers.common["Authorization"] =
-        "Bearer " + data.token;
       setCurrentUser(data.user);
       setIsLoading(false);
       Router.push("/");
     } else displayToastErrorByErrorCode(0);
   };
 
+  const getUserData = async () => {
+    if (currentUser) {
+      let res = await Instance.get(`/api/user/info/${currentUser?._id}`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (res?.data) {
+        setCurrentUser(res?.data[0]);
+        return res.data[0];
+      } else return 205;
+    }
+  };
+
   const AutoLogin = async () => {
-    if (
-      router.route != "/login" &&
-      !router.asPath.startsWith("/authentication")
-    ) {
+    try {
       setIsLoading(true);
       const { data } = await Instance.get("/api/user/autologin", {
         headers: {
           Accept: "application/json",
-          Authorization: axios.defaults.headers.common["Authorization"],
         },
       });
       if (data.message === "Auto Login success") {
         setCurrentUser(data.user);
         setIsLoading(false);
-        Router.push("/");
+        getUserData();
       } else if (data.message === "No token provided !") {
         setIsLoading(false);
         setCurrentUser(undefined);
-        Router.push("/login");
+        Router.push("/");
       }
+    } catch {
+      setIsLoading(false);
+      setCurrentUser(undefined);
+      Router.push("/");
     }
   };
 
   const logout = async () => {
     setIsLoading(true);
-    setCurrentUser(undefined);
     Router.push("/login");
     const { data } = await Instance.get("/api/user/logout", {
       headers: {
         Accept: "application/json",
-        Authorization: axios.defaults.headers.common["Authorization"],
       },
     });
-    console.log(data);
     if (data.message === "Disconnect success") {
+      setCurrentUser(undefined);
       setIsLoading(false);
       toast.success("Disconnect", {
         position: "bottom-right",
@@ -112,6 +121,7 @@ export const AuthWrapper = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
+        getUserData,
         Register,
         Login,
         logout,

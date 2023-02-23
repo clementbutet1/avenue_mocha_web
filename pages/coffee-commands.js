@@ -11,7 +11,6 @@ const CoffeeCommands = () => {
   const [data, setData] = useState([]);
 
   const getAllCoffe = async () => {
-    console.log("token maybe : " + axios.defaults.headers.common["Authorization"]);
     let res = await Instance.get(
       `/api/coffees`,
       {

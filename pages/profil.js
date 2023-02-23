@@ -4,12 +4,14 @@ import { useUser } from "../src/context/UserContext";
 import { toast } from "react-toastify";
 import Protected from "../src/hoc/Protected";
 import TextInput from "../src/components/TextInput";
+import { useAuth } from "../src/context/AuthContext";
 
 const ProfilPage = () => {
-  const { userData, updateUserData } = useUser();
-  const [username, setUsername] = useState(userData?.username);
-  const [phone, setPhone] = useState(userData?.phone);
-  const [email, setEmail] = useState(userData?.email);
+  const { currentUser, getUserData } = useAuth();
+  const { updateUserData } = useUser();
+  const [username, setUsername] = useState(currentUser?.username);
+  const [phone, setPhone] = useState(currentUser?.phone || "");
+  const [email, setEmail] = useState(currentUser?.email);
   const [emailError, setEmailError] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
 
@@ -24,12 +26,6 @@ const ProfilPage = () => {
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
   };
-  useEffect(() => {
-    setFielEmail(false);
-    setFielUsername(false);
-    setFieldPhone(false);
-    setEmailError(false);
-  }, [email, phone, username]);
 
   const updateProfil = async () => {
     if (!email) setFielEmail(true);
@@ -44,11 +40,12 @@ const ProfilPage = () => {
       setPhoneError(true);
       return;
     }
+    setPhoneError(false);
     setFieldPhone(false);
     setFielEmail(false);
     setFielUsername(false);
     setEmailError(false);
-    await updateUserData(email, username);
+    await updateUserData(email, username, phone, currentUser?._id);
     toast.success("Success Modify", {
       position: "bottom-right",
       autoClose: 5000,
@@ -59,6 +56,10 @@ const ProfilPage = () => {
       progress: undefined,
     });
   };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
 
   return (
     <Layout title="Profil">

@@ -6,12 +6,12 @@ import TextInput from "../src/components/TextInput";
 import Instance from "../src/Instance";
 import axios from "axios";
 import Protected from "../src/hoc/Protected";
-import { useUser } from "../src/context/UserContext";
+import { useAuth } from "../src/context/AuthContext";
 
 const CreateCoffee = () => {
-  const { userData } = useUser();
+  const { currentUser } = useAuth();
   const { query: { titlecoffee } } = Router;
-  const [author, setAuthor] = useState(userData?.username);
+  const [author, setAuthor] = useState(currentUser?.username);
   const [title, setTitle] = useState(titlecoffee);
   const [caffeine, setCaffeine] = useState(0);
   const [sugar, setSugar] = useState(0);
@@ -38,7 +38,6 @@ const CreateCoffee = () => {
     let res = await Instance.post(`/api/coffees/create`, raw, {
       headers: {
         Accept: "application/json",
-        Authorization: axios.defaults.headers.common["Authorization"],
       },
     });
     if (res.data) {
