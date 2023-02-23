@@ -28,25 +28,49 @@ export const AuthWrapper = ({ children }) => {
     else displayToastErrorByErrorCode(0);
   };
 
-  const Login = async (email, password) => {
-    setIsLoading(true);
-    const { data } = await Instance.post(
-      "/api/user/login",
-      {
-        email,
-        password,
-      }
-    );
-    if (data.error === "User not found") displayToastErrorByErrorCode(3);
-    else if (data.error === "Password incorrect")
-      displayToastErrorByErrorCode(4);
-    else if (data.message === "Auth successful") {
-      console.log((data))
-      setCurrentUser(data.user);
-      setIsLoading(false);
-      Router.push("/");
-    } else displayToastErrorByErrorCode(0);
-  };
+  // const Login = async (email, password) => {
+  //   setIsLoading(true);
+  //   const { data } = await Instance.post(
+  //     "/api/user/login",
+  //     {
+  //       email,
+  //       password,
+  //     }
+  //   );
+  //   if (data.error === "User not found") displayToastErrorByErrorCode(3);
+  //   else if (data.error === "Password incorrect")
+  //     displayToastErrorByErrorCode(4);
+  //   else if (data.message === "Auth successful") {
+  //     console.log((data))
+  //     setCurrentUser(data.user);
+  //     setIsLoading(false);
+  //     Router.push("/");
+  //   } else displayToastErrorByErrorCode(0);
+  // };
+
+  const Login = async (email, password) =>
+    fetch(`${process.env.NEXT_PUBLIC_APP_URL}`, {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify({
+        Email: email,
+        Password: password,
+      }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    }).then((data) => {
+      if (data.error === "User not found") displayToastErrorByErrorCode(3);
+      else if (data.error === "Password incorrect")
+        displayToastErrorByErrorCode(4);
+      else if (data.message === "Auth successful") {
+        console.log(data);
+        setCurrentUser(data.user);
+        setIsLoading(false);
+        Router.push("/");
+      } else displayToastErrorByErrorCode(0);
+    });
 
   const getUserData = async () => {
     if (currentUser) {
