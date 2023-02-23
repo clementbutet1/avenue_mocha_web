@@ -14,14 +14,10 @@ export const UserWrapper = ({ children }) => {
       username: username,
       phone: phone,
     };
-    let res = await Instance.put(`/api/user/info/${currentUser?._id}`, raw, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "multipart/form-data",
-        "Access-Control-Allow-Origin": process.env.NEXT_PUBLIC_APP_URL,
-      },
-    });
+    console.log(raw);
+    let res = await Instance.put(`/api/user/info/${id}`, raw);
     if (res.data) {
+      console.log(res?.data);
       setCurrentUser(res.data);
       return res.data;
     } else return 205;
