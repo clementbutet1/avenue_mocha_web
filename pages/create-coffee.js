@@ -40,6 +40,7 @@ const CreateCoffee = () => {
     let res = await Instance.post(`/api/coffees/create`, raw, {
       headers: {
         Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
     });
     if (res.data) {
