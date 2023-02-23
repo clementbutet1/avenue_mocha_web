@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext } from "react";
 import Layout from "../src/components/Layout";
 import { useUser } from "../src/context/UserContext";
 import { toast } from "react-toastify";
+import Protected from "../src/hoc/Protected";
 
 const ProfilPage = () => {
   const { userData, updateUserData } = useUser();
@@ -141,4 +142,4 @@ const ProfilPage = () => {
   );
 };
 
-export default ProfilPage;
+export default Protected(ProfilPage);

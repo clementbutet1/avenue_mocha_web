@@ -6,6 +6,7 @@ import TextInput from "../../src/components/TextInput";
 import { useRouter } from 'next/router';
 import Instance from "../../src/Instance";
 import axios from "axios";
+import Protected from "../../src/hoc/Protected";
 
 const CoffeesPage = () => {
   const [author, setAuthor] = useState("");
@@ -168,4 +169,4 @@ const CoffeesPage = () => {
   );
 };
 
-export default CoffeesPage;
+export default Protected(CoffeesPage);

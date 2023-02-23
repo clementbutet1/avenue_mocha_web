@@ -11,7 +11,7 @@ export function Protected(WrappedComponent) {
 
     useEffect(() => {
       if (!isLoading) {
-        if (!isAuthenticated) router.push("/login");
+        if (!isAuthenticated) router.push("/");
         else if (
           (router.asPath == "/login" ||
             router.asPath == "/authentication/register") &&

@@ -15,7 +15,7 @@ export const AuthWrapper = ({ children }) => {
   const router = useRouter();
   const [ cookie, setCookie, removeCookie] = useCookies(['cookie-name']);
 
-  const Register = async (email, password, username) => {
+  const Register = async (email, password, username, phone) => {
     setIsLoading(true);
     let myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -23,6 +23,7 @@ export const AuthWrapper = ({ children }) => {
       email: email,
       password: password,
       username: username,
+      phone: phone,
     };
     let res = await Instance.post(`/api/user/create`, raw, myHeaders);
     if (res.status === 201) {

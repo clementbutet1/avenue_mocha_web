@@ -5,6 +5,7 @@ import displayToastErrorByErrorCode from "../utils/errors-management";
 import TextInput from "../src/components/TextInput";
 import Instance from "../src/Instance";
 import axios from "axios";
+import Protected from "../src/hoc/Protected";
 
 const CreateCoffee = () => {
   const [author, setAuthor] = useState("");
@@ -38,7 +39,7 @@ const CreateCoffee = () => {
       },
     });
     if (res.data) {
-      Router.push("/");
+      Router.push("/coffee-commands");
     } else displayToastErrorByErrorCode(0);
   };
 
@@ -146,4 +147,4 @@ const CreateCoffee = () => {
   );
 };
 
-export default CreateCoffee;
+export default Protected(CreateCoffee);
