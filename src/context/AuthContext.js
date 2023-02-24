@@ -37,7 +37,6 @@ export const AuthWrapper = ({ children }) => {
         password,
       }
     );
-    console.log(data.data);
     data = data.data;
     if (data.error === "User not found") displayToastErrorByErrorCode(3);
     else if (data.error === "Password incorrect")
