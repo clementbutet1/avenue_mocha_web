@@ -27,6 +27,18 @@ const ProfilPage = () => {
       );
   };
 
+  const isPhoneNumberValid = (phoneNumber) => {
+    const regexPhoneNumber =
+      /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+    if (phoneNumber && !regexPhoneNumber.test(phoneNumber)) {
+      setPhoneError(true);
+      return true;
+    } else {
+      setPhoneError(false);
+      return false;
+    }
+  };
+
   const updateProfil = async () => {
     if (!email) setFielEmail(true);
     if (!username) setFielUsername(true);
@@ -36,7 +48,7 @@ const ProfilPage = () => {
       setEmailError(true);
       return;
     }
-    if (phone.length != 10) {
+    if (isPhoneNumberValid(phone) === true) {
       setPhoneError(true);
       return;
     }
@@ -134,7 +146,7 @@ const ProfilPage = () => {
                       {phoneError && (
                         <div className="flex item-start pl-5 text-red-600">
                           <p className="text-red pt-1 text-center">
-                            The filed must containe 10 number
+                          Invalid field phone
                           </p>
                         </div>
                       )}
