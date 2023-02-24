@@ -52,7 +52,6 @@ export const AuthWrapper = ({ children }) => {
     if (currentUser) {
       let res = await Instance.get(`/api/user/info/${currentUser?._id}`);
       if (res?.data) {
-        console.log(res?.data);
         setCurrentUser(res?.data[0]);
         return res.data[0];
       } else return 205;

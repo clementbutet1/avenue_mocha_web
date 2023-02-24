@@ -14,10 +14,8 @@ export const UserWrapper = ({ children }) => {
       username: username,
       phone: phone,
     };
-    console.log(raw);
     let res = await Instance.put(`/api/user/info/${id}`, raw);
     if (res.data) {
-      console.log(res?.data);
       setCurrentUser(res.data);
       return res.data;
     } else return 205;
