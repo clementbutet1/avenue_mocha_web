@@ -176,7 +176,7 @@ const CreateAccount = () => {
                     {phoneError && (
                       <div className="flex item-start pl-5 text-red-600">
                         <p className="text-red pt-1 text-center">
-                          The filed must containe 10 number
+                          The filed phone must contain 10 number
                         </p>
                       </div>
                     )}
@@ -207,9 +207,10 @@ const CreateAccount = () => {
                     {passwordForm && (
                       <div className="flex item-start pl-5 text-red-600">
                         <p className="text-red pt-1 text-center">
-                          Le mot de passe doit avoir au moins 8 caractères et
-                          contenir au moins une lettre minuscule, une lettre
-                          majuscule, un chiffre et un caractère spécial
+                          The password must be at least 8 characters long and
+                          contain at least contain at least one lower case
+                          letter, one upper case letter one upper case letter,
+                          one number and one special character
                         </p>
                       </div>
                     )}
