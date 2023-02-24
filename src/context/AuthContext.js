@@ -42,7 +42,6 @@ export const AuthWrapper = ({ children }) => {
     else if (data.error === "Password incorrect")
       displayToastErrorByErrorCode(4);
     else if (data.message === "Auth successful") {
-      console.log((data))
       setCurrentUser(data.user);
       setIsLoading(false);
       Router.push("/");
